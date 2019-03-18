@@ -23,7 +23,7 @@ if (mV == 0) mode = 2;
 switch (mode)
 {
 	case 0:
-	printf ("\nТемпература= %4.2Lf ºС\n\n", thermo_pol ());
+	printf ("\nТемпература= %4.2Lf °С\n\n", thermo_pol ());
 	break;
 
 	case 1:
