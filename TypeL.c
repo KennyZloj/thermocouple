@@ -8,7 +8,7 @@ unsigned char f = 1, mode;
 
 long double thermo_pol (void);
 
-void main (void)
+int main (void)
 {
 while (f)
 {

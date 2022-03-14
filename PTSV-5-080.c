@@ -10,7 +10,7 @@ long double  Rt;
 
 long double thermo_pol (void);
 
-void main(void)
+int main(void)
 {
 printf ("\n");
 printf ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");

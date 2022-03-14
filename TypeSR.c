@@ -9,7 +9,7 @@ unsigned char f = 1, mode;
 
 long double thermo_rpol (void);
 
-void main (void)
+int main (void)
 {
 while (f)
 {
