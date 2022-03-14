@@ -7,11 +7,22 @@ const long double polinom2 [15] = {0.240975303L, 0.209108771L, 0.190439972L, 0.1
 const long double Dn = 439.932854L, Bn = 0.183324722L, a = -0.002181L, b = 0.000080L, M = -0.002194L, Rtt = 100.00315L, S = 1.00L / 6.00L;
 unsigned char f = 1, mode;
 long double  Rt;
+char name [255];
 
 long double thermo_pol (void);
 
-void main(void)
+int main(char* name)
 {
+FILE *fp;
+if ((fp = fopen(name, "r")) == NULL)
+	{
+	printf ("\n");
+	printf("Ошибка открытия файла!\n");
+	return 0;
+	}
+fclose(fp);
+printf ("\n");
+printf ("Файл найден и открыт\n");
 printf ("\n");
 printf ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 printf ("Перерасчёт актуален до 3 сентября 2019 г. для ПТСВ-5-3 зав.№080.\n");
