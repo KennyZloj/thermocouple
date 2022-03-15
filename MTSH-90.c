@@ -5,9 +5,11 @@
 
 const long double polinom1 [9] = {472.418020L, 37.684494L, 7.472018L, 2.920828L, 0.005184L, -0.963864L, -0.188732L, 0.191203L, 0.049025L};
 const long double polinom2 [15] = {0.240975303L, 0.209108771L, 0.190439972L, 0.142648498L, 0.077993465L, 0.012475611L, -0.032267127L, -0.075291522L, -0.056470670L, 0.076201285L, 0.123893204L, -0.029201193L, -0.091173542L, 0.001317696L, 0.026025526L};
-const long double Dn = 439.932854L, Bn = 0.183324722L, a = -0.002181L, b = 0.000080L, M = -0.002194L, Rtt = 100.00315L, S = 1.00L / 6.00L;
+const long double Dn = 439.932854L, Bn = 0.183324722L, S = 1.00L / 6.00L;
+long double Rtt, a, b, M;
 unsigned char f = 1, mode;
 long double  Rt;
+char name [30], serialnumber [30];
 
 long double thermo_pol (void);
 
@@ -15,7 +17,6 @@ int main(int argc, char** argv)
 {
 	FILE *fp;
 	int res;
-	float pi;
 
 	if (argc != 2) {
 		perror("Подайте название файла ради Христа!\n");
@@ -29,13 +30,18 @@ int main(int argc, char** argv)
 		return err;
 	}
 
-	res = fscanf(fp, "PI=%f", &pi);
-	if (res != 1) /* нам нужно вытащить одно значение */ {
+	res = fscanf(fp, "name=%s serialnumber=%s Rtt=%Lf a=%Lf b=%Lf M=%Lf", &name, &serialnumber, &Rtt, &a, &b, &M);
+	if (res != 6) /* нам нужно вытащить шесть значений */ {
 		perror("Внутри файла хрень!\n");
 		fclose(fp);
 	}
-
-	printf("PI = %f", pi);
+	
+	printf("name = %s\n", name);
+	printf("Заводской № = %s\n", serialnumber);
+	printf("Rtt = %Lf\n", Rtt);
+	printf("a = %Lf\n", a);
+	printf("b = %Lf\n", b);
+	printf("M = %Lf\n", M);
 
 	fclose(fp);
 	printf ("\n");
