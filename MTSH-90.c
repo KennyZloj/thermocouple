@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <math.h>
 #include <errno.h>
@@ -9,7 +8,7 @@ const long double Dn = 439.932854L, Bn = 0.183324722L, S = 1.00L / 6.00L;
 long double Rtt, a, b, M;
 unsigned char f = 1, mode;
 long double  Rt;
-char name [30], serialnumber [30];
+char name[30], serialnumber[30];
 
 long double thermo_pol (void);
 
@@ -30,35 +29,30 @@ int main(int argc, char** argv)
 		return err;
 	}
 
-	res = fscanf(fp, "name=%s serialnumber=%s Rtt=%Lf a=%Lf b=%Lf M=%Lf", &name, &serialnumber, &Rtt, &a, &b, &M);
+	res = fscanf(fp, "name=%s serialnumber=%s Rtt=%Lf a=%Lf b=%Lf M=%Lf", &*name, &*serialnumber, &Rtt, &a, &b, &M);
 	if (res != 6) /* нам нужно вытащить шесть значений */ {
 		perror("Внутри файла хрень!\n");
 		fclose(fp);
+		return 0;
 	}
 	
-	printf("name = %s\n", name);
-	printf("Заводской № = %s\n", serialnumber);
-	printf("Rtt = %Lf\n", Rtt);
-	printf("a = %Lf\n", a);
-	printf("b = %Lf\n", b);
-	printf("M = %Lf\n", M);
-
 	fclose(fp);
 	printf ("\n");
-	printf ("Файл найден и открыт\n");
+	printf ("Файл %s найден и прочитан\n", argv[1]);
 	printf ("\n");
-	printf ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-	printf ("Перерасчёт актуален до 3 сентября 2019 г. для ПТСВ-5-3 зав.№080.\n");
-	printf ("Далее необходимо откорректировать исходный код в соответствии с\n");
-	printf ("поверочным сертификатом на термометр и скомпилировать заново.\n");
-	printf ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+	printf ("Термопреобразователь %s зав.№%s\n", name, serialnumber);
+	printf ("Сопротивление в тройной точке Rtt= %Lf\n", Rtt);
+	printf ("Коэффициенты МТШ-90:\n");
+	printf("a= %Lf\n", a);
+	printf("b= %Lf\n", b);
+	printf("M= %Lf\n", M);
 	printf ("\n");
 	while (f) {
 		printf ("\nВведи измеренное значение сопротивления Rt, в Омах, 0 для выхода\n\n");
 		scanf ("%Lf", &Rt);
 
-		if (Rt >= 79.90L && Rt <= 196.00L) mode = 0;
-		if (Rt < 79.90L || Rt > 196.00L) mode = 1;
+		if (Rt >= 50.000L && Rt <= 300.000L) mode = 0;
+		if (Rt < 50.000L || Rt > 300.000L) mode = 1;
 		if (Rt == 0) mode = 2;
 
 		switch (mode)
@@ -78,6 +72,7 @@ int main(int argc, char** argv)
 			break;
 		}
 	}
+	return 0;
 }
 
 long double thermo_pol (void)
@@ -90,7 +85,7 @@ long double thermo_pol (void)
 	Wr = 0;
 	W = Rt / Rtt;
 
-	if (Rt >= Rtt && Rt <= 196.00L) {
+	if (Rt >= Rtt && Rt <= 300.000) {
 		Wr = W - (a * (W - 1.00L) + b * pow((W - 1.00L),2));
 		for (i=0;i<9;i++) {
 			g = polinom1[i] * pow((Wr - 2.64L) / 1.64L, i+1);
@@ -100,7 +95,7 @@ long double thermo_pol (void)
 		t = t + Dn;
 	}	
 	
-	if (Rt >= 79.90L && Rt < Rtt) {
+	if (Rt >= 50.000L && Rt < Rtt) {
 		Wr = W - (M * (W - 1.00L));
 		for (i=0;i<15;i++) {
 			g = polinom2[i] * pow((pow(Wr,S) - 0.65L) / 0.35L, i+1);
