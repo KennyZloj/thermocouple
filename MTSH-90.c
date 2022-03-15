@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 		return err;
 	}
 
-	res = fscanf(fp, "name=%s serialnumber=%s Rtt=%Lf a=%Lf b=%Lf M=%Lf", &*name, &*serialnumber, &Rtt, &a, &b, &M);
+	res = fscanf(fp, "name=%s serialnumber=%s Rtt=%Lf a=%Lf b=%Lf M=%Lf", name, serialnumber, &Rtt, &a, &b, &M);
 	if (res != 6) /* нам нужно вытащить шесть значений */ {
 		perror("Внутри файла хрень!\n");
 		fclose(fp);
