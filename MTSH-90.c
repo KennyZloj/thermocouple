@@ -30,6 +30,8 @@ int main(int argc, char** argv)
 	}
 
 	res = fscanf(fp, "name=%s serialnumber=%s Rtt=%Lf a=%Lf b=%Lf M=%Lf", name, serialnumber, &Rtt, &a, &b, &M);
+	printf ("\n");
+	printf ("Файл %s найден и прочитан\n", argv[1]);
 	if (res != 6) /* нам нужно вытащить шесть значений */ {
 		perror("Внутри файла хрень!\n");
 		fclose(fp);
@@ -37,11 +39,10 @@ int main(int argc, char** argv)
 	}
 	
 	fclose(fp);
-	printf ("\n");
-	printf ("Файл %s найден и прочитан\n", argv[1]);
+
 	printf ("\n");
 	printf ("Термопреобразователь %s зав.№%s\n", name, serialnumber);
-	printf ("Сопротивление в тройной точке Rtt= %Lf\n", Rtt);
+	printf ("Сопротивление в тройной точке Rtt= %Lf Ом\n", Rtt);
 	printf ("Коэффициенты МТШ-90:\n");
 	printf("a= %Lf\n", a);
 	printf("b= %Lf\n", b);
@@ -85,7 +86,7 @@ long double thermo_pol (void)
 	Wr = 0;
 	W = Rt / Rtt;
 
-	if (Rt >= Rtt && Rt <= 300.000) {
+	if (Rt >= Rtt && Rt <= 300.000L) {
 		Wr = W - (a * (W - 1.00L) + b * pow((W - 1.00L),2));
 		for (i=0;i<9;i++) {
 			g = polinom1[i] * pow((Wr - 2.64L) / 1.64L, i+1);
