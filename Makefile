@@ -5,7 +5,9 @@ CC              ?= gcc
 OBJ             := $(subst .c,.o,$(shell ls *.c))
 LIBS		+= -lm
 
-all: cppcheck $(basename $(OBJ))
+all: $(basename $(OBJ))
+
+check: cppcheck $(basename $(OBJ))
 
 cppcheck:
 	@echo "cppcheck version: $(shell cppcheck --version)"
