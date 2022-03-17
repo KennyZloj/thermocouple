@@ -11,6 +11,7 @@ long double  Rt;
 char name[30], serialnumber[30];
 
 long double thermo_pol (void);
+void flushkeyboard(void);
 
 int main(int argc, char** argv)
 {
@@ -24,9 +25,10 @@ int main(int argc, char** argv)
 
 	fp = fopen(argv[1], "r");
 	if (!fp) {
-		int err = errno;
+		//int err = errno;
 		perror("Ошибка открытия файла!\n");
-		return err;
+		//return err;
+		return ENOENT;
 	}
 
 	res = fscanf(fp, "name=%s serialnumber=%s Rtt=%Lf a=%Lf b=%Lf M=%Lf", name, serialnumber, &Rtt, &a, &b, &M);
@@ -49,8 +51,18 @@ int main(int argc, char** argv)
 	printf("M= %Lf\n", M);
 	printf ("\n");
 	while (f) {
+
+		do {
 		printf ("\nВведи измеренное значение сопротивления Rt, в Омах, 0 для выхода\n\n");
-		scanf ("%Lf", &Rt);
+		res = scanf ("%Lf", &Rt);
+			if (res != 1) {
+			printf ("\nОшибка ввода\n\n");
+			//fscanf(stdin, "%*[^\n]%*c");
+			flushkeyboard();
+			}
+		} while (res != 1);
+		/*printf ("\nВведи измеренное значение сопротивления Rt, в Омах, 0 для выхода\n\n");
+		res = scanf ("%Lf", &Rt);*/
 
 		if (Rt >= 50.000L && Rt <= 300.000L) mode = 0;
 		if (Rt < 50.000L || Rt > 300.000L) mode = 1;
@@ -69,8 +81,7 @@ int main(int argc, char** argv)
 			printf ("\nВыход\n\n");
 		break;
 		default:
-			printf ("\nОшибка ввода\n\n");
-			break;
+		break;
 		}
 	}
 	return 0;
@@ -107,4 +118,10 @@ long double thermo_pol (void)
 	}
 
 	return t;
-}	
+}
+
+void flushkeyboard(void)
+{	
+	int ch;
+	while((ch = getc(stdin)) != EOF && ch != '\n');
+}
