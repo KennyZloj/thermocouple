@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <errno.h>
+#include <string.h>
 
 const long double polinom1 [9] = {472.418020L, 37.684494L, 7.472018L, 2.920828L, 0.005184L, -0.963864L, -0.188732L, 0.191203L, 0.049025L};
 const long double polinom2 [15] = {0.240975303L, 0.209108771L, 0.190439972L, 0.142648498L, 0.077993465L, 0.012475611L, -0.032267127L, -0.075291522L, -0.056470670L, 0.076201285L, 0.123893204L, -0.029201193L, -0.091173542L, 0.001317696L, 0.026025526L};
@@ -8,15 +10,16 @@ const long double Dn = 439.932854L, Bn = 0.183324722L, S = 1.00L / 6.00L;
 long double Rtt, a, b, M;
 unsigned char f = 1, mode;
 long double  Rt;
-char name[30], serialnumber[30];
+char name[30], serialnumber[30], str[31];
 
 long double thermo_pol (void);
-void flushkeyboard(void);
 
 int main(int argc, char** argv)
 {
 	FILE *fp;
 	int res;
+	int err;
+	char *ptr;
 
 	if (argc != 2) {
 		perror("Подайте название файла ради Христа!\n");
@@ -51,18 +54,39 @@ int main(int argc, char** argv)
 	printf("M= %Lf\n", M);
 	printf ("\n");
 	while (f) {
-
+	
 		do {
+		int cntr=0;
+		err=0;
 		printf ("\nВведи измеренное значение сопротивления Rt, в Омах, 0 для выхода\n\n");
-		res = scanf ("%Lf", &Rt);
-			if (res != 1) {
-			printf ("\nОшибка ввода\n\n");
-			//fscanf(stdin, "%*[^\n]%*c");
-			flushkeyboard();
+		scanf ("%s", str);
+		for (unsigned char i=0;i<strlen(str);i++) {
+				if (str[i]==',') {
+				printf("\nОставь свои запятые в мёртвом Советском Союзе, совок!\n");
+				printf("Дробная часть в десятичной дроби отделяется точкой.\n");
+				str[i]='.';
+				}
+			err=1;
+			if (str[i]=='.') cntr++;
+			if (str[i]=='0') err=0;
+			if (str[i]=='1') err=0;
+			if (str[i]=='2') err=0;
+			if (str[i]=='3') err=0;
+			if (str[i]=='4') err=0;
+			if (str[i]=='5') err=0;
+			if (str[i]=='6') err=0;
+			if (str[i]=='7') err=0;
+			if (str[i]=='8') err=0;
+			if (str[i]=='9') err=0;
+			if (str[i]=='.') err=0;
+			if (cntr>1) err=1;
+			if (i>29) err=1;
+			if (err==1) break;
 			}
-		} while (res != 1);
-		/*printf ("\nВведи измеренное значение сопротивления Rt, в Омах, 0 для выхода\n\n");
-		res = scanf ("%Lf", &Rt);*/
+		if (err==1) printf ("\nОшибка ввода\n\n");		
+		} while (err==1);
+		
+		Rt=strtold(str, &ptr);
 
 		if (Rt >= 50.000L && Rt <= 300.000L) mode = 0;
 		if (Rt < 50.000L || Rt > 300.000L) mode = 1;
@@ -118,10 +142,4 @@ long double thermo_pol (void)
 	}
 
 	return t;
-}
-
-void flushkeyboard(void)
-{	
-	int ch;
-	while((ch = getc(stdin)) != EOF && ch != '\n');
 }
