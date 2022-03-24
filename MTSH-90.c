@@ -8,7 +8,7 @@ const long double polinom1 [9] = {472.418020L, 37.684494L, 7.472018L, 2.920828L,
 const long double polinom2 [15] = {0.240975303L, 0.209108771L, 0.190439972L, 0.142648498L, 0.077993465L, 0.012475611L, -0.032267127L, -0.075291522L, -0.056470670L, 0.076201285L, 0.123893204L, -0.029201193L, -0.091173542L, 0.001317696L, 0.026025526L};
 const long double Dn = 439.932854L, Bn = 0.183324722L, S = 1.00L / 6.00L;
 long double Rtt, a, b, M;
-unsigned char f = 1, mode;
+unsigned char f = 1, mode, angryctr = 0, wrath = 0;
 long double  Rt;
 char name[30], serialnumber[30], str[31];
 
@@ -60,11 +60,10 @@ int main(int argc, char** argv)
 		err=0;
 		printf ("\nВведи измеренное значение сопротивления Rt, в Омах, 0 для выхода\n\n");
 		scanf ("%s", str);
-		for (unsigned char i=0;i<strlen(str);i++) {
+			for (unsigned char i=0;i<strlen(str);i++) {
 				if (str[i]==',') {
-				printf("\nОставь свои запятые в мёртвом Советском Союзе, совок!\n");
-				printf("Дробная часть в десятичной дроби отделяется точкой.\n");
 				str[i]='.';
+				angryctr++;
 				}
 			err=1;
 			if (str[i]=='.') cntr++;
@@ -85,6 +84,43 @@ int main(int argc, char** argv)
 			}
 		if (err==1) printf ("\nОшибка ввода\n\n");		
 		} while (err==1);
+		
+		if (angryctr > 0 && wrath == 0) {
+		printf("\nОставь свои запятые в мёртвом Советском Союзе, совок!\n");
+		printf("Дробная часть в десятичной дроби отделяется точкой.\n");
+		wrath++;
+		angryctr=0;
+		}
+		
+		if (angryctr > 0 && wrath == 1) {
+		printf("\nНадоел со своей запятой!\n");
+		wrath++;
+		angryctr=0;
+		}
+		
+		if (angryctr > 0 && wrath == 2) {
+		printf("\nУмный, да?\n");
+		wrath++;
+		angryctr=0;
+		}
+		
+		if (angryctr > 0 && wrath == 3) {
+		printf("\nХватит ставить запятую!\n");
+		printf("Последнее предупреждение!\n");
+		wrath++;
+		angryctr=0;
+		}
+		
+		if (angryctr>0 && wrath > 3) {
+			for (unsigned char i=0;i<100;i++) {
+			printf("ОШИБКА ОШИБКА ОШИБКА ОШИБКА ОШИБКА ОШИБКА ОШИБКА ОШИБКА ОШИБКА\n");
+			printf("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR\n");
+			}
+		printf("Машинка ругается\n");
+		printf("Доволен?\n");
+		return 0;
+		}
+		
 		
 		Rt=strtold(str, &ptr);
 
